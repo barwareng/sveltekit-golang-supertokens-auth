@@ -31,7 +31,7 @@ export const handle = (async ({ event, resolve }) => {
 				event.url.href.replace(event.url.origin, '') != '/'
 					? `?redirectBack=${event.url.href.replace(event.url.origin, '')}`
 					: '';
-			throw redirect(302, `/refresh-session${redirectBack}`);
+			// throw redirect(302, `/refresh-session${redirectBack}`);
 		}
 		throw err;
 	});

@@ -45,6 +45,7 @@
 		"bits-ui": "^0.21.6",
 		"clsx": "^2.1.1",
 		"jose": "^5.2.4",
+		"supertokens-web-js": "^0.10.1",
 		"tailwind-merge": "^2.3.0",
 		"tailwind-variants": "^0.2.1"
 	}
