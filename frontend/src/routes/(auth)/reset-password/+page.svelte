@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import PageHead from '$lib/components/reusable/PageHead.svelte';
 	let email: string;
-	let password: string;
 </script>
 
 <PageHead title="Signup" />

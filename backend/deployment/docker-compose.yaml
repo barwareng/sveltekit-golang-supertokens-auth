@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    container_name: acme-corp-postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    env_file:
+      - ../.env
+    volumes:
+      - acme-corp-postgres:/var/lib/postgresql/data
+    networks:
+      - acme-corp
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
+    container_name: acme-corp-supertokens
+    depends_on:
+      - postgres
+    ports:
+      - 3567:3567
+    env_file:
+      - ../.env
+    networks:
+      - acme-corp
+    restart: always
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  acme-corp-postgres:
+networks:
+  acme-corp:
