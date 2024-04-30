@@ -8,12 +8,11 @@
 	let password: string;
 </script>
 
-<PageHead title="Signup" />
-<div class="mx-auto flex h-screen max-w-sm items-center justify-center">
-	<Card.Root>
+<PageHead title="Signin" />
+<div class="mx-auto flex h-screen items-center justify-center">
+	<Card.Root class="min-w-80 ">
 		<Card.Header class="space-y-1">
-			<Card.Title class="text-2xl">Create an account</Card.Title>
-			<Card.Description>Enter your email below to create your account</Card.Description>
+			<Card.Title class="text-2xl">Signin to your account</Card.Title>
 		</Card.Header>
 		<Card.Content class="grid gap-4">
 			<div class="grid gap-2">
@@ -24,6 +23,9 @@
 				<Label for="password">Password</Label>
 				<Input id="password" type="password" bind:value={password} />
 			</div>
+			<div class="-my-6 flex justify-end">
+				<Button variant="link" href="/reset-password">Forgot password?</Button>
+			</div>
 		</Card.Content>
 		<Card.Footer class="flex flex-col">
 			<Button
@@ -31,9 +33,9 @@
 				class="w-full"
 				on:click={() => {
 					// signupWithEmailAndPassword(email, password);
-				}}>Create account</Button
+				}}>Signin</Button
 			>
-			<Button variant="link" href="/signin">Or Sign In</Button>
+			<Button variant="link" href="/signup">Or Sign up</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>
