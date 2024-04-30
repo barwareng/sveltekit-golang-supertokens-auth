@@ -26,6 +26,7 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"lucide-svelte": "^0.376.1",
 		"postcss": "^8.4.32",
 		"postcss-load-config": "^5.0.2",
 		"prettier": "^3.1.1",
@@ -41,6 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"bits-ui": "^0.21.6",
 		"clsx": "^2.1.1",
 		"tailwind-merge": "^2.3.0",
 		"tailwind-variants": "^0.2.1"
