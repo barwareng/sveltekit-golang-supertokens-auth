@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/app/models"
+	"github.com/acme-corp/app/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -27,6 +27,7 @@ func ConnectDb() {
 		log.Fatal("Failed to connect to database. \n", err)
 	}
 	db.AutoMigrate(
+		&models.Team{},
 		&models.User{},
 	)
 	DB = db

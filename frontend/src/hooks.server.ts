@@ -1,9 +1,12 @@
+import { client } from '$lib/api/Client';
 import { VITE_API_BASE_URL } from '$lib/env';
+import { isPublicRoute } from '$utils/routing';
 import { redirect, type Handle } from '@sveltejs/kit';
 import * as jose from 'jose';
-const publicRoutes = new Set(['/signup', '/signin', '/verify-email', '/reset-password']);
+
 export const handle = (async ({ event, resolve }) => {
-	if (publicRoutes.has(event.url.pathname)) {
+	client.setFetch(event.fetch);
+	if (isPublicRoute(event.url.pathname)) {
 		const response = await resolve(event);
 		return response;
 	}
@@ -16,7 +19,8 @@ export const handle = (async ({ event, resolve }) => {
 	// because we have separate handling for a present but expired/invalid jwt token below
 	if (!jwt) {
 		// Allow public routes and shareables (e.g. /posts/123)
-		if (!publicRoutes.has(event.url.pathname)) {
+		if (!isPublicRoute(event.url.pathname)) {
+			console.log('NOT FOUND JWT');
 			throw redirect(302, '/signin');
 		} else {
 			const response = await resolve(event);
@@ -26,21 +30,26 @@ export const handle = (async ({ event, resolve }) => {
 	const JWKS = jose.createRemoteJWKSet(new URL(`${VITE_API_BASE_URL}/auth/jwt/jwks.json`));
 
 	const { payload } = await jose.jwtVerify(jwt, JWKS).catch(async (err) => {
-		if (!publicRoutes.has(event.url.pathname)) {
+		if (!isPublicRoute(event.url.pathname)) {
 			const redirectBack =
 				event.url.href.replace(event.url.origin, '') != '/'
 					? `?redirectBack=${event.url.href.replace(event.url.origin, '')}`
 					: '';
-			// throw redirect(302, `/refresh-session${redirectBack}`);
+			throw redirect(302, `/refresh-session${redirectBack}`);
 		}
 		throw err;
 	});
 	if (payload && typeof payload === 'object') {
-		// TODO uncomment if email verification is required to use app
 		// Prevent access until email verification is complete
-		// const isEmailVerified = (payload as any)['st-ev'].v;
-		// if (!isEmailVerified) {
-		// 	throw redirect(302, '/verify-email');
+		const isEmailVerified = (payload as any)['st-ev'].v;
+		if (!isEmailVerified) {
+			throw redirect(302, '/verify-email');
+		}
+
+		// TODO handle onboarding
+		// const isOnboarded = !!(payload as any)['onboarded'];
+		// if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
+		// 	throw redirect(302, '/settings');
 		// }
 	}
 	const response = await resolve(event);

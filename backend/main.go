@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/pkg/config"
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/pkg/database"
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/pkg/middleware"
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/pkg/routes"
+	"github.com/acme-corp/pkg/config"
+	"github.com/acme-corp/pkg/database"
+	"github.com/acme-corp/pkg/middleware"
+	"github.com/acme-corp/pkg/routes"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/joho/godotenv/autoload"
 )

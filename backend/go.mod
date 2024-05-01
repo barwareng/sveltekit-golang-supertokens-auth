@@ -1,4 +1,4 @@
-module github.com/barwareng/sveltekit-golang-supertokens-auth
+module github.com/acme-corp
 
 go 1.19
 
@@ -8,7 +8,7 @@ require (
 	github.com/rs/xid v1.5.0
 	github.com/supertokens/supertokens-golang v0.17.5
 	gorm.io/driver/postgres v1.5.7
-	gorm.io/gorm v1.25.10
+	gorm.io/gorm v1.25.9
 )
 
 require (
@@ -29,6 +29,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect

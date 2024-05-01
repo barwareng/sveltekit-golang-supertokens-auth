@@ -17,7 +17,7 @@ func FiberMiddleware(app *fiber.App) {
 	app.Use(
 		cors.New(cors.Config{
 			AllowOrigins:     os.Getenv("CORS_ALLOWED_ORIGINS"),
-			AllowHeaders:     "Origin, Content-Type, Accept, " + strings.Join(supertokens.GetAllCORSHeaders(), ", "),
+			AllowHeaders:     "Origin, Content-Type, Accept, X-Team, " + strings.Join(supertokens.GetAllCORSHeaders(), ", "),
 			AllowCredentials: true,
 		}),
 		recover.New(),

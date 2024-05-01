@@ -4,9 +4,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/app/models"
-	"github.com/barwareng/sveltekit-golang-supertokens-auth/pkg/database"
-	"github.com/gofiber/fiber/v2/log"
+	"github.com/acme-corp/app/models"
+	"github.com/acme-corp/pkg/database"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/ingredients/emaildelivery"
 	"github.com/supertokens/supertokens-golang/recipe/emailverification"
@@ -66,9 +65,7 @@ func SupertokensInit() {
 						ogSendEmail := *originalImplementation.SendEmail
 
 						(*originalImplementation.SendEmail) = func(input emaildelivery.EmailType, userContext supertokens.UserContext) error {
-							// This is: `${websiteDomain}${websiteBasePath}/verify-email`
-							log.Info(input.EmailVerification.EmailVerifyLink)
-							// log.Info()
+
 							input.EmailVerification.EmailVerifyLink = strings.Replace(
 								input.EmailVerification.EmailVerifyLink,
 								"auth/",
@@ -138,8 +135,8 @@ func SupertokensInit() {
 							ThirdPartyId: "google",
 							Clients: []tpmodels.ProviderClientConfig{
 								{
-									ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-									ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+									ClientID:     "1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
+									ClientSecret: "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",
 								},
 							},
 						},
@@ -148,6 +145,27 @@ func SupertokensInit() {
 			}),
 			userroles.Init(nil),
 			session.Init(&sessmodels.TypeInput{
+				Override: &sessmodels.OverrideStruct{
+					Functions: func(originalImplementation sessmodels.RecipeInterface) sessmodels.RecipeInterface {
+
+						// first we copy the original implementation
+						originalCreateNewSession := *originalImplementation.CreateNewSession
+
+						(*originalImplementation.CreateNewSession) = func(userID string, accessTokenPayload, sessionDataInDatabase map[string]interface{}, disableAntiCsrf *bool, tenantId string, userContext supertokens.UserContext) (sessmodels.SessionContainer, error) {
+
+							var userTeams []models.AccessTokenTeamPayload
+							err := database.DB.Model(&models.User{ID: userID}).Association("Teams").Find(&userTeams)
+							if err != nil {
+								return nil, err
+							}
+							accessTokenPayload["teams"] = userTeams
+							return originalCreateNewSession(userID, accessTokenPayload, sessionDataInDatabase, disableAntiCsrf, tenantId, userContext)
+						}
+
+						return originalImplementation
+
+					},
+				},
 				CookieSameSite: &cookieSameSite,
 				CookieSecure:   &cookieSecure,
 				CookieDomain:   &cookieDomain,
